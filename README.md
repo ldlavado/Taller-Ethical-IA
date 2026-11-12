@@ -1,8 +1,6 @@
 # Taller: Auditoría de Sesgo y Documentación de Modelos de IA
 
-[![Fairness Audit CI](https://github.com/<USUARIO>/<REPO>/actions/workflows/fairness-audit.yml/badge.svg)](https://github.com/<USUARIO>/<REPO>/actions/workflows/fairness-audit.yml)
-
-> ✏️ **Reemplaza `<USUARIO>/<REPO>` del badge por los de tu repositorio.**
+[![Fairness Audit CI](https://github.com/ldlavado/Taller-Ethical-IA/actions/workflows/fairness-audit.yml/badge.svg)](https://github.com/ldlavado/Taller-Ethical-IA/actions/workflows/fairness-audit.yml)
 
 Taller práctico de 30 minutos. **No se entrena ningún modelo**: se audita uno ya
 existente a partir de sus predicciones, se integra la auditoría en CI y se
