@@ -96,26 +96,26 @@ def disparate_impact_ratio(rate_minority: float, rate_majority: float) -> float:
 
 def statistical_parity_difference(rate_minority: float, rate_majority: float) -> float:
     """
-    TODO 2: Statistical Parity Difference.
+    Statistical Parity Difference.
 
         SPD = P(Y_hat=1 | minoritario) - P(Y_hat=1 | mayoritario)
 
     Valor ideal: 0. Un valor negativo indica que el grupo minoritario
     es aceptado con menor frecuencia.
     """
-    raise NotImplementedError("TODO 2: implementa la Statistical Parity Difference")
+    return rate_minority - rate_majority
 
 
 def equal_opportunity_difference(tpr_minority: float, tpr_majority: float) -> float:
     """
-    TODO 1: Equal Opportunity Difference.
+    Equal Opportunity Difference.
 
         EOD = TPR_min - TPR_maj
 
     Valor ideal: 0. Compara solo a las personas realmente calificadas
     (true_label = 1) de cada grupo.
     """
-    raise NotImplementedError("TODO 1: implementa la Equal Opportunity Difference")
+    return tpr_minority - tpr_majority
 
 
 # --------------------------------------------------------------------------
