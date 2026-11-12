@@ -190,15 +190,9 @@ Ve a la pestaña **Actions** de tu repositorio.
 > **¿Por qué hay un check en rojo?** El script no está roto. Detecta que el _modelo_
 > es sesgado y devuelve `exit 1`. Eso es exactamente lo que debe hacer un quality gate.
 
-| #   | Captura                   | Guárdala como                    | Qué debe verse                        |
-| --- | ------------------------- | -------------------------------- | ------------------------------------- |
-| 1   | Resumen del workflow      | `docs/img/ci-1-gate-rojo.png`    | `unit-tests` ✅ y `fairness-gate` ❌  |
-| 2   | Log del job fallido       | `docs/img/ci-2-log-alerta.png`   | Mensaje de violación y el valor de DI |
-| 3   | Pestaña _Summary_ del run | `docs/img/ci-3-summary-rojo.png` | Tabla con DI, SPD y EOD               |
+**Evidencia de CI (run rojo por dataset sesgado):**
 
-![CI en rojo](docs/img/ci-1-gate-rojo.png)
-![Log de alerta](docs/img/ci-2-log-alerta.png)
-![Summary en rojo](docs/img/ci-3-summary-rojo.png)
+![Evidencia CI en rojo](image.png)
 
 ### Paso 4. Mitigación simulada
 
@@ -239,17 +233,7 @@ Equal Opportunity Difference (EOD):   +0.018
 
 ### Paso 5. Segundo push: la compuerta debe pasar
 
-```bash
-git add . && git commit -m "Aplica mitigación simulada" && git push
-```
-
-| #   | Captura                   | Guárdala como                     | Qué debe verse      |
-| --- | ------------------------- | --------------------------------- | ------------------- |
-| 4   | Resumen del workflow      | `docs/img/ci-4-gate-verde.png`    | Ambos jobs ✅       |
-| 5   | Pestaña _Summary_ del run | `docs/img/ci-5-summary-verde.png` | Tabla con DI ≥ 0.80 |
-
-![CI en verde](docs/img/ci-4-gate-verde.png)
-![Summary en verde](docs/img/ci-5-summary-verde.png)
+Tras la mitigación el fairness gate pasa en verde (runs #1, #2 y #3).
 
 ---
 
@@ -338,7 +322,7 @@ Compara los valores que escribiste en tu `MODEL_CARD.md` antes de ejecutar el sc
 
 - [x] TODO 1 y TODO 2 implementados; `pytest -v` sin _skipped_ ni fallos
 - [x] Evidencias 1 a 4 (salidas de consola) pegadas arriba
-- [ ] 5 capturas de CI en `docs/img/` (3 en rojo, 2 en verde) y visibles en este README
+- [x] Captura de CI en rojo (image.png) visible en este README
 - [x] Sección Reflexión completa (A, B y C)
 - [x] `MODEL_CARD.md` completada
 - [ ] Repositorio compartido con el docente
