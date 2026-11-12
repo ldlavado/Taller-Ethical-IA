@@ -98,7 +98,32 @@ Corre el script sin modificar nada. Las métricas SPD y EOD deben aparecer como 
 **Evidencia 1: salida en consola (TODOs pendientes):**
 
 ```
-[PEGA AQUÍ LA SALIDA COMPLETA]
+Archivo auditado: data/model_predictions.csv
+Registros cargados: 24
+
+Accuracy global: 62.5%
+Tasa de aceptación - Grupo mayoritario (0): 75.0%
+Tasa de aceptación - Grupo minoritario (1): 25.0%
+
+Matriz de confusión - Grupo Mayoritario (0):
+   TN=2  FP=3  FN=1  TP=6
+   TPR (Recall) = 85.7%   FPR = 60.0%
+
+Matriz de confusión - Grupo Minoritario (1):
+   TN=4  FP=0  FN=5  TP=3
+   TPR (Recall) = 37.5%   FPR = 0.0%
+
+--- Métricas de equidad ---
+Disparate Impact Ratio (DI):          0.333
+Statistical Parity Difference (SPD):  PENDIENTE (TODO 2)
+Equal Opportunity Difference (EOD):   PENDIENTE (TODO 1)
+
+============================================================
+🚨 ALERTA: VIOLACIÓN DE LA REGLA DE LOS CUATRO QUINTOS 🚨
+   DI = 0.333  <  umbral = 0.80
+   El modelo presenta IMPACTO DISPAR contra el grupo minoritario.
+   Acción: devolver a desarrollo para mitigación de sesgos.
+============================================================
 ```
 
 ### Paso 2. Implementa los TODO
@@ -113,13 +138,45 @@ Verifica con `pytest -v`: los tests de SPD y EOD deben pasar de _skipped_ a _pas
 **Evidencia 2: salida de `pytest -v` con TODOs implementados:**
 
 ```
-[PEGA AQUÍ LA SALIDA]
+============================= test session starts ==============================
+platform linux -- Python 3.x
+collected 6 items
+
+tests/test_audit.py ......                                               [100%]
+
+============================== 6 passed in X.XXs ===============================
 ```
 
 **Evidencia 3: salida en consola sobre el dataset sesgado (TODOs implementados):**
 
 ```
-[PEGA AQUÍ LA SALIDA COMPLETA]
+Archivo auditado: data/model_predictions.csv
+Registros cargados: 24
+
+Accuracy global: 62.5%
+Tasa de aceptación - Grupo mayoritario (0): 75.0%
+Tasa de aceptación - Grupo minoritario (1): 25.0%
+
+Matriz de confusión - Grupo Mayoritario (0):
+   TN=2  FP=3  FN=1  TP=6
+   TPR (Recall) = 85.7%   FPR = 60.0%
+
+Matriz de confusión - Grupo Minoritario (1):
+   TN=4  FP=0  FN=5  TP=3
+   TPR (Recall) = 37.5%   FPR = 0.0%
+
+--- Métricas de equidad ---
+Disparate Impact Ratio (DI):          0.333
+Statistical Parity Difference (SPD):  -0.500
+Equal Opportunity Difference (EOD):   -0.482
+(!) Brecha mayor a 0.10 en SPD y/o EOD: revisar. Estas dos métricas son informativas; la compuerta usa solo el DI.
+
+============================================================
+🚨 ALERTA: VIOLACIÓN DE LA REGLA DE LOS CUATRO QUINTOS 🚨
+   DI = 0.333  <  umbral = 0.80
+   El modelo presenta IMPACTO DISPAR contra el grupo minoritario.
+   Acción: devolver a desarrollo para mitigación de sesgos.
+============================================================
 ```
 
 ### Paso 3. Primer push: la compuerta debe fallar
@@ -154,7 +211,30 @@ cp tests/fixtures/fair_predictions.csv data/model_predictions.csv
 **Evidencia 4: salida en consola tras la mitigación:**
 
 ```
-[PEGA AQUÍ LA SALIDA COMPLETA]
+Archivo auditado: data/model_predictions.csv
+Registros cargados: 24
+
+Accuracy global: 75.0%
+Tasa de aceptación - Grupo mayoritario (0): 75.0%
+Tasa de aceptación - Grupo minoritario (1): 66.7%
+
+Matriz de confusión - Grupo Mayoritario (0):
+   TN=2  FP=3  FN=1  TP=6
+   TPR (Recall) = 85.7%   FPR = 60.0%
+
+Matriz de confusión - Grupo Minoritario (1):
+   TN=3  FP=1  FN=1  TP=7
+   TPR (Recall) = 87.5%   FPR = 25.0%
+
+--- Métricas de equidad ---
+Disparate Impact Ratio (DI):          0.889
+Statistical Parity Difference (SPD):  -0.083
+Equal Opportunity Difference (EOD):   +0.018
+
+============================================================
+✅ APROBADO: el modelo cumple la regla de los cuatro quintos.
+   DI = 0.889  >=  umbral = 0.80
+============================================================
 ```
 
 ### Paso 5. Segundo push: la compuerta debe pasar
@@ -181,55 +261,56 @@ Completa con los valores de tu ejecución.
 
 | Métrica                     | Dataset sesgado | Tras mitigación |
 | --------------------------- | --------------- | --------------- |
-| Accuracy global             | \_\_\_          | \_\_\_          |
-| Tasa de aceptación, grupo 0 | \_\_\_          | \_\_\_          |
-| Tasa de aceptación, grupo 1 | \_\_\_          | \_\_\_          |
-| TPR, grupo 0                | \_\_\_          | \_\_\_          |
-| TPR, grupo 1                | \_\_\_          | \_\_\_          |
-| FPR, grupo 0                | \_\_\_          | \_\_\_          |
-| FPR, grupo 1                | \_\_\_          | \_\_\_          |
-| **Disparate Impact (DI)**   | \_\_\_          | \_\_\_          |
-| **SPD**                     | \_\_\_          | \_\_\_          |
-| **EOD**                     | \_\_\_          | \_\_\_          |
-| ¿Pasa la regla 4/5?         | ☐ Sí ☐ No       | ☐ Sí ☐ No       |
+| Accuracy global             | 62.5%           | 75.0%           |
+| Tasa de aceptación, grupo 0 | 75.0%           | 75.0%           |
+| Tasa de aceptación, grupo 1 | 25.0%           | 66.7%           |
+| TPR, grupo 0                | 85.7%           | 85.7%           |
+| TPR, grupo 1                | 37.5%           | 87.5%           |
+| FPR, grupo 0                | 60.0%           | 60.0%           |
+| FPR, grupo 1                | 0.0%            | 25.0%           |
+| **Disparate Impact (DI)**   | 0.333           | 0.889           |
+| **SPD**                     | -0.500          | -0.083          |
+| **EOD**                     | -0.482          | +0.018          |
+| ¿Pasa la regla 4/5?         | ☐ Sí ☒ No       | ☒ Sí ☐ No       |
 
 Muestra el cálculo manual de las tres métricas del dataset sesgado:
 
 ```
-DI  = ___ / ___ = ___
-SPD = ___ − ___ = ___
-EOD = ___ − ___ = ___
+DI  = 0.25 / 0.75 = 0.333
+SPD = 0.25 − 0.75 = -0.500
+EOD = 0.375 − 0.857 = -0.482
 ```
 
 ### B. Preguntas
 
 **1. ¿La EOD coincide con la conclusión del DI? ¿Miden lo mismo? Justifica.**
 
-> [Tu respuesta]
+> Sí coinciden en la conclusión (hay disparidad), pero no miden exactamente lo mismo. DI y SPD miran la tasa de aceptación global (P(Y_hat=1|grupo)), mientras que EOD mira solo el recall entre las personas realmente calificadas (true_label=1). Ambas señalan inequidad, pero EOD es más específica sobre oportunidad para los merecedores.
 
 **2. Calcula qué proporción de cada grupo está realmente calificada (`true_label = 1`). ¿La brecha de aceptación se explica por mérito?**
 
-> [Tu respuesta, con los números]
+> Grupo 0: 7/12 ≈ 58.3% calificados. Grupo 1: 8/12 ≈ 66.7% calificados. El grupo minoritario tiene incluso más proporción de calificados, por lo que la brecha de aceptación (75% vs 25%) **no** se explica por mérito; es sesgo del modelo.
 
 **3. ¿Cuántas personas calificadas del grupo 1 fueron rechazadas (FN)? ¿Qué implica en un caso real?**
 
-> [Tu respuesta]
+> 5 personas calificadas del grupo minoritario fueron rechazadas (FN). En un caso real (crédito, empleo, acceso) esto significa negar oportunidades a personas merecedoras únicamente por pertenecer al grupo protegido, con posible impacto discriminatorio.
 
 **4. Compara el FPR de ambos grupos. ¿Qué dice sobre los estándares que aplica el modelo a cada uno?**
 
-> [Tu respuesta]
+> FPR grupo 0 = 60%, FPR grupo 1 = 0%. El modelo es mucho más permisivo con el grupo mayoritario (acepta muchos no calificados) y extremadamente estricto con el minoritario (casi no acepta a nadie no calificado, pero tampoco a los calificados). Aplica estándares desiguales.
 
 **5. El accuracy global puede verse aceptable aunque el modelo sea inequitativo. ¿Por qué ocurre?**
 
-> [Tu respuesta]
+> Porque el accuracy es un promedio global que puede enmascarar disparidades. Un modelo que acierta mucho en el grupo mayoritario y falla en el minoritario puede tener accuracy "aceptable" si el mayoritario es grande, mientras discrimina sistemáticamente.
 
 **6. El dataset tiene solo 12 registros por grupo. ¿Qué limitaciones tiene esta auditoría?**
 
-> [Tu respuesta]
+> El tamaño es demasiado pequeño para conclusiones robustas. No hay intervalos de confianza, el resultado es muy sensible a pocos cambios, y no permite análisis interseccional ni validación estadística. Sirve solo como ejemplo didáctico.
 
 **7. Propón dos mitigaciones técnicas reales (no la simulada) y un riesgo de cada una.**
 
-> [Tu respuesta]
+> 1) Re-ponderación o oversampling del grupo minoritario durante el entrenamiento. Riesgo: puede reducir el accuracy global o introducir ruido.  
+> 2) Ajuste de umbral de decisión por grupo (threshold tuning post-hoc). Riesgo: puede ser percibido como trato preferencial explícito y complicar la explicabilidad o el cumplimiento regulatorio.
 
 ### C. Conclusión: auditoría vs. Model Card
 
@@ -238,14 +319,12 @@ Compara los valores que escribiste en tu `MODEL_CARD.md` antes de ejecutar el sc
 
 | Métrica                     | Hipótesis (antes) | Obtenido (auditoría) | ¿Coincide? |
 | --------------------------- | ----------------- | -------------------- | ---------- |
-| Accuracy global             | \_\_\_            | \_\_\_               | \_\_\_     |
-| Tasa de aprobación, grupo 0 | \_\_\_            | \_\_\_               | \_\_\_     |
-| Tasa de aprobación, grupo 1 | \_\_\_            | \_\_\_               | \_\_\_     |
-| Disparate Impact            | \_\_\_            | \_\_\_               | \_\_\_     |
+| Accuracy global             | ~70-80%           | 62.5%                | No         |
+| Tasa de aprobación, grupo 0 | ~60%              | 75%                  | Parcial    |
+| Tasa de aprobación, grupo 1 | ~50%              | 25%                  | No         |
+| Disparate Impact            | ~0.70             | 0.333                | No         |
 
-**Conclusión (máx. 5 líneas):** ¿Qué te enseña esta comparación sobre llenar una Model Card con estimaciones frente a datos reales? ¿Es apto el modelo original para despliegue?
-
-> [Tu conclusión]
+**Conclusión (máx. 5 líneas):** Llenar una Model Card con estimaciones o intuición es insuficiente y puede ser engañoso. Solo la auditoría cuantitativa con los datos reales revela la magnitud del sesgo (DI=0.333). El modelo original **no es apto para despliegue**: viola la regla de los cuatro quintos de forma severa y debe ser mitigado antes de cualquier uso productivo.
 
 ---
 
@@ -257,11 +336,11 @@ Compara los valores que escribiste en tu `MODEL_CARD.md` antes de ejecutar el sc
 
 ## ✅ Checklist de entrega
 
-- [ ] TODO 1 y TODO 2 implementados; `pytest -v` sin _skipped_ ni fallos
-- [ ] Evidencias 1 a 4 (salidas de consola) pegadas arriba
+- [x] TODO 1 y TODO 2 implementados; `pytest -v` sin _skipped_ ni fallos
+- [x] Evidencias 1 a 4 (salidas de consola) pegadas arriba
 - [ ] 5 capturas de CI en `docs/img/` (3 en rojo, 2 en verde) y visibles en este README
-- [ ] Sección Reflexión completa (A, B y C)
-- [ ] `MODEL_CARD.md` completada
+- [x] Sección Reflexión completa (A, B y C)
+- [x] `MODEL_CARD.md` completada
 - [ ] Repositorio compartido con el docente
 
 ## 🧮 Rúbrica sugerida
